@@ -14,6 +14,9 @@ This directory contains scripts that can calibrate the height of, preprocess, an
 ## The directory `others`
 This directory contains scripts than can automatically create height map of square gratings. 
 
+## The directory `templateFunction`
+This directory contains a copy of template functions with annotation of inputs and outputs. 
+
 ## Results & Figures
 
 1. **Figure_01**: Downsampled Height Maps of Fabric Surface Patterns using a Low Resolution of 0.1 mm/pixel.

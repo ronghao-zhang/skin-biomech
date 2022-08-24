@@ -82,7 +82,7 @@ for n = 1: gel_num
     hmap_y = Cal_gel_hmap_y(1,n);
     
     % calculate the downsampled height map
-    hmap_ds = DownSampling(hmap,hmap_x,hmap_y,cal_dot_hmap_x,cal_dot_hmap_y);
+    hmap_ds = DownSampling(hmap,cal_dot_hmap_x,cal_dot_hmap_y);
     
     % calculate the detrended height map
     hmap_dt = Detrending(hmap_ds); 
@@ -205,6 +205,23 @@ hold off
 
 %% Function: to import the resolution and Height Map
 function [res_x, res_y, matrix] = ImportHeightMap(file_name,file_path)
+
+    %------------------------------
+    %-Function aim- 
+    %   Import Height Map Generated Using a Confocal Microscopy Scanning
+    %   Over Some Texture. 
+    %-Function Input-
+    %   file_name: the name of the .csv file generated after scanning
+    %   file_path: the path of the .csv file generated after scanning
+    %-Function Output-
+    %   res_x: the resolution of the height map in the x-axis direction (length)
+    %          unit: um/pixel
+    %   res_y: the resolution of the height map in the y-axis direction (width)
+    %          unit: um/pixel
+    %   matrix: the matrix that stores the height of the texture. The value
+    %           of each element is the height at that specific location. 
+    %------------------------------
+
     % set up path
     cd(file_path);
     % get the resolution
@@ -221,7 +238,27 @@ function [res_x, res_y, matrix] = ImportHeightMap(file_name,file_path)
 end
 
 %% Function: to DownSample the Gel -> Match the Dimension of Raw Patterns of Cal dots
-function hmap_ds = DownSampling(hmap,hmap_x,hmap_y,raw_x,raw_y)
+function hmap_ds = DownSampling(hmap,raw_x,raw_y)
+    
+    %------------------------------
+    %-Function aim- 
+    %   Downsample the height map (name: A) of one texture (e.g. Gelsight) to match the
+    %   dimension of another height map (name: B) (e.g. Ground Truth). The resulting
+    %   height map A' has exactly the same dimension as B. 
+    %-Function Input-
+    %   hmap: the height map need to be downsampled (A).
+    %   raw_x: the x dimension of the height map being referenced (B).
+    %          can be computed by size(B,2).
+    %   raw_y: the y dimension of the height map being referenced (A).
+    %          can be computed by size(B,1).
+    %-Function Output-
+    %   hmap_ds: the height map after downsampling (A'). 
+    %------------------------------
+    
+    % calculate the current size in x and y dimension
+    hmap_x = size(hmap,2);
+    hmap_y = size(hmap,1);
+    
     % creat an empty matrix to store the hmap after downsampling
     hmap_ds = zeros(raw_y, raw_x);
 
@@ -286,6 +323,23 @@ end
 
 %% Function: to detrend the downsampling calibration gel height map
 function hmap_dt = Detrending(hmap_ds)
+
+    
+    %------------------------------
+    %-Function aim- 
+    %   Detrend a height map to subtract a best-fit linear model from your
+    %   data. This step makes one to more focus on the trend of the pattern
+    %   itself instead of artifacts being introduced. 
+    %-Function Input-
+    %   hmap_ds: the height map need to be detrended. 
+    %            usually, the input height map is already downsampled. 
+    %-Function Output-
+    %   hmap_dt: the height map after detrending. 
+    %-Note-
+    % A Pre-Indentation need to be added to all elements 
+    % or the mean of the hmap_dt will be around 0.  
+    %------------------------------
+    
     % get the dimension of hmap_ds
     y = size(hmap_ds,1);
     x = size(hmap_ds,2);
@@ -338,6 +392,15 @@ end
 
 %% Function: To Select Points from A Height Map
 function points_coord = SelectDotsOnFig(points, hmap, titleStr)
+
+    %------------------------------
+    %-Function Input-
+    %   points: number of points need to be select
+    %   hmap: the height map
+    %   titleStr: the title of the figure
+    %-Function Output-
+    %   points_coord: the coordinates of the points
+    %------------------------------
 
     % empty matrix to store the points selected
     points_coord = zeros(points,2);
