@@ -1,5 +1,5 @@
 # skin-biomech-scripts
-This repo contains MatLab scripts that aims to process skin biomechanics signals &amp; to reveal the neural basis for somatosensation 
+This repo contains MatLab scripts that aims to process skin biomechanics signals by rejecting artifacts introduced by confocal microscopy. 
 
 ## Code & Scripts
 ### The directory `fabricScan`
